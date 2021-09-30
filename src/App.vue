@@ -1,29 +1,71 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <home-header></home-header>
+    <router-view></router-view>
+    <home-footer></home-footer>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+import HomeFooter from '@/components/HomeFooter.vue'
+import HomeHeader from '@/components/HomeHeader.vue'
+export default {
+  name: 'app',
+  components: {
+    HomeHeader,
+    HomeFooter
   }
+}
+</script>
+
+<style lang="scss">
+@import "assets/css/global.css";
+@for $i from 0 to 5 {
+  .pd#{$i} {
+    padding: $i * 10 + px !important;
+  }
+  .pl#{$i} {
+    padding-left: $i * 10 + px !important;
+  }
+  .pr#{$i} {
+    padding-right: $i * 10 + px !important;
+  }
+  .mr#{$i} {
+    margin-right: $i * 10 + px !important;
+  }
+  .ml#{$i} {
+    margin-left: $i * 10 + px !important;
+  }
+  .mt#{$i} {
+    margin-top: $i * 10 + px !important;
+  }
+}
+.svg {
+  position: relative;
+  top: -4px;
+}
+.text-center {
+  text-align: center;
+}
+.pl0 {
+  padding-left: 0;
+}
+.pr0 {
+  padding-right: 0;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.pull-right {
+  float: right !important;
+}
+.orangered {
+  color: orangered;
+}
+.gray {
+  color: #999;
 }
 </style>

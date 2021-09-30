@@ -1,0 +1,54 @@
+// 定义普通变量
+$spacers: (
+  4: 40px,
+  5: 40px
+) !default;
+$spacer: 10px;
+
+$utils: () !default;
+
+$spacers: map-merge($map1: (
+  0: 0,
+  // 引用外部变量
+  1: 1 * $spacer,
+  2: 2 * $spacer,
+  3: 3 * $spacer
+  // 传递变量与map1合并，可用于自定义属性值
+), $map2: $spacers);
+
+
+$utils: map-merge($map1: (
+  m: (
+    property: margin,
+    values: $spacers
+  ),
+  mx: (
+    property: margin-left margin-right,
+    values: $spacers
+  ),
+  p: (
+    property: padding,
+    values: $spacers
+  ),
+  px: (
+    property: padding-left padding-right,
+    values: $spacers
+  )
+), $map2: $utils);
+
+// 第一遍遍历，遍历出px 和 属性对象
+@each $key, $value in $utils {
+  // values 值为utils中每一个value的值，即$spacers， $key可以指定$value对象中指定的属性
+  $values: map-get($map: $value, $key: values);
+  // 第二遍遍历， 遍历出values的key 和 值，即$spacers的键值对
+  @each $item-key, $item-value in $values {
+    // $properties的值为, $value中所有的property对象
+    $properties: map-get($map: $value, $key: property);
+    .#{$key}-#{$item-key} {
+      // 第三遍遍历,遍历出properties的每一项属性值，即property的所有属性值
+      @each $property in $properties {
+        #{$property}: $item-value !important
+      }
+    }
+  }
+}

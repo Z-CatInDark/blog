@@ -1,0 +1,223 @@
+<template>
+  <div class="layui-container fly-marginTop">
+    <div class="fly-panel fly-panel-user" pad20>
+      <div class="layui-tab layui-tab-brief" lay-filter="user">
+        <ul class="layui-tab-title">
+          <li class="layui-this">登入</li>
+          <li><router-link :to="{ name: 'reg' }">注册</router-link></li>
+        </ul>
+        <div
+          class="layui-form layui-tab-content"
+          id="LAY_ucm"
+          style="padding: 20px 0"
+        >
+          <validation-observer ref="observer" v-slot="{ validate }">
+            <div class="layui-tab-item layui-show">
+              <div class="layui-form layui-form-pane">
+                <form method="post">
+                  <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">用户名</label>
+                    <validation-provider
+                      name="username"
+                      rules="required|email"
+                      v-slot="{ errors }"
+                    >
+                      <div class="layui-input-inline">
+                        <input
+                          v-model="username"
+                          type="text"
+                          name="username"
+                          placeholder="请输入用户名"
+                          autocomplete="off"
+                          class="layui-input"
+                        />
+                      </div>
+                      <div class="layui-form-mid">
+                        <span style="color: #c00">{{ errors[0] }}</span>
+                      </div>
+                    </validation-provider>
+                  </div>
+                  <div class="layui-form-item">
+                    <label for="L_pass" class="layui-form-label">密码</label>
+                    <validation-provider
+                      name="password"
+                      rules="required|min:6"
+                      v-slot="{ errors }"
+                    >
+                      <div class="layui-input-inline">
+                        <input
+                          v-model="password"
+                          type="password"
+                          name="password"
+                          placeholder="请输入密码"
+                          autocomplete="off"
+                          class="layui-input"
+                        />
+                      </div>
+                      <div class="layui-form-mid">
+                        <span style="color: #c00">{{ errors[0] }}</span>
+                      </div>
+                    </validation-provider>
+                  </div>
+                  <validation-provider
+                    name="vercode"
+                    rules="required|length:4"
+                    v-slot="{ errors }"
+                    ref="vercodeField"
+                  >
+                    <div class="layui-row">
+                      <div class="layui-form-item">
+                        <label for="L_vercode" class="layui-form-label"
+                          >验证码</label
+                        >
+                        <div class="layui-input-inline">
+                          <input
+                            v-model="vercode"
+                            type="text"
+                            name="vercode"
+                            placeholder="请输入验证码"
+                            autocomplete="off"
+                            class="layui-input"
+                          />
+                        </div>
+                        <div>
+                          <span
+                            class="svg"
+                            style="color: #c00"
+                            v-html="svg"
+                            @click="getVerCode()"
+                          ></span>
+                        </div>
+                        <span style="color: #c00">{{ errors[0] }}</span>
+                      </div>
+                    </div>
+                  </validation-provider>
+                  <div class="layui-form-item">
+                    <button
+                      class="layui-btn"
+                      type="button"
+                      @click="validate().then(submit)"
+                    >
+                      立即登录
+                    </button>
+                    <span style="padding-left: 20px">
+                      <router-link :to="{ name: 'forget' }"
+                        >忘记密码？</router-link
+                      >
+                    </span>
+                  </div>
+                  <div class="layui-form-item fly-form-app">
+                    <span>或者使用社交账号登入</span>
+                    <a
+                      href="/app/qq"
+                      onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
+                      class="iconfont icon-qq"
+                      title="QQ登入"
+                    ></a>
+                    <a
+                      href="/app/weibo/"
+                      onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})"
+                      class="iconfont icon-weibo"
+                      title="微博登入"
+                    ></a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </validation-observer>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { getCode, login } from '@/api/login.js'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import uuid from 'uuid/v4'
+export default {
+  name: 'login',
+  data () {
+    return {
+      username: '',
+      password: '',
+      vercode: '',
+      svg: '',
+      sid: ''
+    }
+  },
+  components: {
+    ValidationProvider,
+    ValidationObserver
+  },
+  mounted () {
+    this.getVerCode()
+  },
+  methods: {
+    // 获取验证码
+    getVerCode () {
+      localStorage.clear()
+      this.getSid()
+      getCode(this.sid).then((res) => {
+        if (res.code === 200) {
+          this.svg = res.data
+        }
+      })
+    },
+    // 获取uuid用于校验验证码
+    getSid () {
+      if (localStorage.getItem('sid')) {
+        this.sid = localStorage.getItem('sid')
+      } else {
+        localStorage.setItem('sid', this.sid)
+        this.sid = uuid()
+      }
+      this.$store.commit('setSid', this.sid)
+    },
+    async submit () {
+      const isValid = await this.$refs.observer.validate()
+      if (!isValid) {
+        return
+      }
+      login({
+        username: this.username,
+        password: this.password,
+        vercode: this.vercode,
+        sid: this.sid
+      })
+        .then((res) => {
+          if (res.code === 200) {
+            // 存储用户登录名
+            res.data.username = this.username
+            this.$store.commit('setUserInfo', res.data)
+            this.$store.commit('setIsLogin', true)
+            this.$store.commit('setToken', res.token)
+            this.username = ''
+            this.password = ''
+            this.vercode = ''
+            requestAnimationFrame(() => {
+              this.$refs.observer.reset()
+            })
+            this.$router.push({ name: 'index' })
+          } else if (res.code === 401) {
+            this.$refs.vercodeField.setErrors([res.msg])
+          }
+        })
+        .catch((err) => {
+          const data = err.response.data
+          if (data.code === 500) {
+            this.$alert('用户名或密码错误，请检查!')
+          } else {
+            this.$alert('服务器错误')
+          }
+        })
+    }
+  }
+}
+</script>
+
+<style lang='scss' scoped>
+.fly-panel {
+  height: 100%;
+}
+</style>
