@@ -1,7 +1,6 @@
 // 封装axios的请求，返回重新封装的数据格式
 // 对错误的统一处理
 import axios from 'axios'
-import errorHandle from './errorHandle'
 import store from '../store'
 import publicConfig from '../config'
 const CancelToken = axios.CancelToken
@@ -47,7 +46,6 @@ class HttpRequest {
       })
       return config
     }, (err) => {
-      errorHandle(err)
       return Promise.reject(err)
     })
 
@@ -61,7 +59,6 @@ class HttpRequest {
         return Promise.reject(res)
       }
     }, (err) => {
-      errorHandle(err)
       return Promise.reject(err)
     })
   }
