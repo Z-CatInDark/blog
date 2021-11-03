@@ -20,7 +20,7 @@
             </li>
           </ul>
           <div class="layui-layer-content">
-            <ul class="layui-tab-item layui-show">
+            <ul class="layui-show img-size">
               <li v-for="(item, index) in items" :key="'signLists' + index">
                 <img src="@/assets/img/kingCat.png" alt="pic" class="mr1" />
                 <cite class="fly-link">{{ item.name }}</cite>
@@ -75,4 +75,13 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+  .layui-layer-content {
+    height: 100%;
+  }
+  .img-size {
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
 </style>

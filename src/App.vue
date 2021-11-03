@@ -20,6 +20,7 @@ export default {
 
 <style lang="scss">
 @import "assets/css/global.css";
+@import "assets/css/layui-layer/layer.css";
 @for $i from 0 to 5 {
   .pd#{$i} {
     padding: $i * 10 + px !important;
@@ -29,6 +30,9 @@ export default {
   }
   .pr#{$i} {
     padding-right: $i * 10 + px !important;
+  }
+  .pt#{$i} {
+    padding-top: $i * 10 + px !important;
   }
   .mr#{$i} {
     margin-right: $i * 10 + px !important;
@@ -67,5 +71,34 @@ export default {
 }
 .gray {
   color: #999;
+}
+.d-flex {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  &.flex-center {
+    justify-content: center;
+  }
+  &.flex-start {
+    justify-content: flex-start;
+  }
+  &.flex-end {
+    justify-content: flex-end;
+  }
+}
+.moup {
+  cursor: pointer !important;
+}
+.disabled {
+  color: #d2d2d2;
+  &:hover {
+    color: #d2d2d2;
+  }
+}
+.link {
+  color: #01AAED;
+  &:hover {
+    color: #5FB878;
+  }
 }
 </style>

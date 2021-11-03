@@ -6,8 +6,8 @@
         <div class="panel border">
           <div class="title">我的会员信息</div>
           <div class="content">
-            <p>积分: <span class="corlor-orange">60</span></p>
-            <p>您当前为: <span class="corlor-orange">普通会员</span></p>
+            <p>积分: <span class="corlor-orange">{{userInfo.favs}}</span></p>
+            <p>您当前为: <span class="corlor-orange">{{ userInfo.isVip === '0' ? '普通会员' : 'VIP' + userInfo.isVip}}</span></p>
           </div>
         </div>
       </div>
@@ -44,6 +44,7 @@
 
 <script>
 import CenterSigh from '@/components/sidebar/Sign.vue'
+import { getUserInfo } from '@/api/user.js'
 export default {
   name: 'userCenter',
   data () {
@@ -71,7 +72,7 @@ export default {
         },
         {
           name: '发表新贴',
-          path: '',
+          path: 'add',
           class: 'layui-icon-add-circle-fine'
         },
         {
@@ -112,8 +113,25 @@ export default {
       ]
     }
   },
+  computed: {
+    userInfo () {
+      return this.$store.state.userInfo
+    }
+  },
   components: {
     CenterSigh
+  },
+  mounted () {
+    this._getUserInfo()
+  },
+  methods: {
+    _getUserInfo () {
+      getUserInfo({ uid: this.userInfo._id }).then((res) => {
+        if (res.code === 200) {
+          this.$store.commit('setUserInfo', res.data)
+        }
+      })
+    }
   }
 }
 </script>

@@ -1,5 +1,6 @@
 import { extend, localize } from 'vee-validate'
-import { required, email, min, length, confirmed, max } from 'vee-validate/dist/rules'
+// eslint-disable-next-line camelcase
+import { required, email, min, length, confirmed, max, is_not } from 'vee-validate/dist/rules'
 import zh from 'vee-validate/dist/locale/zh_CN.json'
 
 extend('email', email)
@@ -8,11 +9,11 @@ extend('required', required)
 extend('length', length)
 extend('confirmed', confirmed)
 extend('max', max)
+extend('is_not', is_not)
 
 // Custom validate
 extend('name', {
   validate: value => {
-    console.log((/^\d+/).test(value))
     return !(/^\d+/).test(value)
   },
   message: '不能以纯数字为昵称'
@@ -33,10 +34,15 @@ localize('zh_CN', {
     name: '昵称',
     username: '账号',
     vercode: '验证码',
-    repassword: '确认密码'
+    repassword: '确认密码',
+    title: '标题',
+    catalog: '分类'
   },
   // 针对不同的name，定义不同的message消息
   fields: {
+    catalog: {
+      is_not: '请选择{_field_}'
+    },
     email: {
       email: '请输入正确的{_field_}',
       required: '请输入{_field_}'

@@ -21,7 +21,8 @@
 <script>
 export default {
   name: 'userSettings',
-  components: {
+  mounted () {
+    this.$store.commit('_reload')
   },
   data () {
     return {

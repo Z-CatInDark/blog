@@ -1,10 +1,31 @@
 {
   "id": "2833620",
   "name": "Blog-icon",
-  "font_family": "iconfontOther",
-  "css_prefix_text": "icon-",
+  "font_family": "iconfont1",
+  "css_prefix_text": "icon1-",
   "description": "",
   "glyphs": [
+    {
+      "icon_id": "5962291",
+      "name": "引用",
+      "font_class": "yinyong",
+      "unicode": "ea90",
+      "unicode_decimal": 60048
+    },
+    {
+      "icon_id": "7617116",
+      "name": "hr",
+      "font_class": "hr",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "8642921",
+      "name": "引用",
+      "font_class": "yinyong1",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
     {
       "icon_id": "22878322",
       "name": "20_帖子频道_发帖子@1x",

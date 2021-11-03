@@ -13,6 +13,7 @@ const Center = () => import(/* webpackChunkName: 'Center' */ './views/Center.vue
 const User = () => import(/* webpackChunkName: 'User' */ './views/User.vue')
 const Confirm = () => import(/* webpackChunkName: 'Confirm' */ './views/Confirm.vue')
 const Reset = () => import(/* webpackChunkName: 'Reset' */ './views/Reset.vue')
+const NotFound = () => import(/* webpackChunkName: 'NotFound' */ './views/NotFound.vue')
 const UserCenter = () => import(/* webpackChunkName: 'UserCenter' */ './components/user/UserCenter.vue')
 const UserMessage = () => import(/* webpackChunkName: 'UserMessage' */ './components/user/UserMessage.vue')
 const UserPosts = () => import(/* webpackChunkName: 'UserPosts' */ './components/user/UserPosts.vue')
@@ -24,7 +25,9 @@ const PicUpload = () => import(/* webpackChunkName: 'PicUpload' */ './components
 const Accounts = () => import(/* webpackChunkName: 'Accounts' */ './components/user/common/Accounts.vue')
 const MyPosts = () => import(/* webpackChunkName: 'MyPosts' */ './components/user/common/MyPosts.vue')
 const MyCollection = () => import(/* webpackChunkName: 'MyCollection' */ './components/user/common/MyCollection.vue')
-const NotFound = () => import(/* webpackChunkName: 'NotFound' */ './views/NotFound.vue')
+const Add = () => import(/* webpackChunkName: 'UpdateDetail' */ './components/contents/Add.vue')
+const UpdateDetail = () => import(/* webpackChunkName: 'UpdateAdd' */ './components/contents/UpdateDetail.vue')
+const Detail = () => import(/* webpackChunkName: 'Detail' */ './components/contents/Detail.vue')
 Vue.use(Router)
 
 const router = new Router({
@@ -67,12 +70,48 @@ const router = new Router({
       component: Reset
     },
     {
+      path: '/add',
+      name: 'add',
+      meta: { requiresAuth: true },
+      component: Add
+    },
+    {
+      path: '/updateDetail/:tid',
+      props: true,
+      name: 'updateDetail',
+      meta: { requiresAuth: true },
+      beforeEnter (to, from, next) {
+        if (['detail', 'myPosts'].indexOf(from.name) !== -1 && to.params.page && to.params.page.isEnd === '0') {
+          next()
+        } else {
+          const updateData = localStorage.getItem('updateData')
+          if (updateData && updateData !== '') {
+            const updateObj = JSON.parse(updateData)
+            if (updateObj.isEnd === '0') {
+              next()
+            } else {
+              next('/')
+            }
+          } else {
+            next('/')
+          }
+        }
+      },
+      component: UpdateDetail
+    },
+    {
+      path: '/detail/:tid',
+      props: true,
+      name: 'detail',
+      component: Detail
+    },
+    {
       path: '/confirm',
       name: 'confirm',
       component: Confirm
     },
     {
-      path: '/user',
+      path: '/user/:uid',
       name: 'user',
       props: true,
       component: User
@@ -145,6 +184,7 @@ const router = new Router({
     },
     {
       path: '*',
+      name: '404',
       redirect: '/404'
     }
   ],

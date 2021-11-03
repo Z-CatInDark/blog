@@ -3,7 +3,7 @@
     <div class="layui-container">
       <ul class="layui-clear">
         <router-link tag="li" class="layui-hide-xs" to="/">
-          <a href="/">首页</a>
+          <a>首页</a>
         </router-link>
         <router-link
           v-for="(item, index) in lists"
@@ -20,16 +20,16 @@
         <!-- 用户登入后显示 -->
         <template v-if="isLogin">
           <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
-            <a href="user/index.html">我发表的贴</a>
+            <router-link :to="{name: 'myPosts'}">我发表的贴</router-link>
           </li>
           <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
-            <a href="user/index.html#collection">我收藏的贴</a>
+            <router-link :to="{name: 'myCollection'}">我收藏的贴</router-link>
           </li>
         </template>
       </ul>
       <div class="right layui-hide-xs">
         <span class="layui-icon layui-icon-search"></span>
-        <a href="" class="layui-btn">发表新贴</a>
+        <router-link class="layui-btn" :to="{name: 'add'}">发表新贴</router-link>
       </div>
     </div>
   </div>
@@ -74,6 +74,8 @@ export default {
       ],
       isLogin: this.$store.state.isLogin
     }
+  },
+  methods: {
   }
 }
 </script>

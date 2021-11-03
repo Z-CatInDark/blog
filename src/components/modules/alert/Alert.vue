@@ -32,20 +32,17 @@ export default {
     },
     success: {
       type: Function,
-      default: () => {
-        console.log('success')
-      }
+      default: () => {}
     },
     cancel: {
       type: Function,
-      default: () => {
-        console.log('cancel')
-      }
+      default: () => {}
     }
   },
   methods: {
     close () {
       this.isShow = false
+      this.cancel()
     },
     closeMask () {
       if (this.type === 'alert') {

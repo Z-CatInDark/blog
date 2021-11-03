@@ -9,50 +9,57 @@
         style="color: #FF5722;"
       >去签到</a>
     </div>
-    <list-item :lists="lists" :isShow="false"></list-item>
+    <list-item :lists="lists" :isShow="!isEnd"></list-item>
   </div>
 </template>
 
 <script>
 import ListItem from './ListItem'
+import { getTop } from '@/api/content'
+
 export default {
   name: 'top',
   data () {
     return {
       page: 0,
       limit: 20,
-      lists: [
-        {
-          uid: {
-            name: '打工王',
-            isVip: 1
-          },
-          title: '五块钱如何花三天',
-          content: '',
-          created: '2021-9-01 01:00:00',
-          catalog: 'ask',
-          fav: 40,
-          isEnd: 0,
-          reads: 10,
-          answer: 0,
-          status: 0,
-          isTop: 1,
-          tags: [
-            {
-              name: '精华',
-              class: 'layui-bg-red'
-            },
-            {
-              name: '热门',
-              class: 'layui-bg-blue'
-            }
-          ]
-        }
-      ]
+      sort: 'created',
+      isEnd: false,
+      lists: []
     }
   },
   components: {
     ListItem
+  },
+  mounted () {
+    this._getTop()
+  },
+  methods: {
+    _getTop () {
+      if (this.isEnd) return
+      let options = {
+        isTop: '1',
+        sort: this.sort,
+        page: this.page,
+        limit: this.limit
+      }
+      getTop(options).then((res) => {
+        if (res.code === 200) {
+          if (res.data.length < this.limit) {
+            this.isEnd = true
+          }
+          if (this.lists.length === 0) {
+            this.lists = res.data
+          } else {
+            this.lists = this.lists.concat(res.data)
+          }
+        }
+      }).catch((err) => {
+        if (err) {
+          this.$alert(err.message)
+        }
+      })
+    }
   }
 }
 </script>

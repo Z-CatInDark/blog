@@ -1,21 +1,22 @@
 <template>
   <div class="fly-header layui-bg-black">
     <div class="layui-container">
-      <a class="fly-logo" href="/">
-        <!-- <img src="../assets/logo-2.png" alt="layui" /> -->
-      </a>
+      <!-- 暂无logo -->
+      <a class="fly-logo" href="/"></a>
       <ul class="layui-nav fly-nav layui-hide-xs">
         <li class="layui-nav-item layui-this">
-          <router-link :to="{ name: 'index' }"><i class="iconfont icon-jiaoliu"></i>交流</router-link>
-        </li>
-        <li class="layui-nav-item">
-          <a href="case/case.html"
-            ><i class="iconfont icon-iconmingxinganli"></i>案例</a
+          <router-link :to="{ name: 'index' }"
+            ><i class="iconfont icon-jiaoliu"></i>论坛</router-link
           >
         </li>
         <li class="layui-nav-item">
-          <a href="/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+          <a href="case/case.html"
+            ><i class="iconfont icon-iconmingxinganli"></i>项目分享</a
+          >
         </li>
+        <!-- <li class="layui-nav-item">
+          <router-link to="case/case.html"><i class="layui-icon layui-icon-app"></i>框架</router-link>
+        </li> -->
       </ul>
 
       <ul class="layui-nav fly-nav-user">
@@ -33,45 +34,44 @@
           <li class="layui-nav-item">
             <router-link :to="{ name: 'reg' }">注册</router-link>
           </li>
-          <li class="layui-nav-item layui-hide-xs">
-            <a
-              href=""
-              onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
-              title="QQ登入"
-              class="iconfont icon-qq"
-            ></a>
-          </li>
-          <li class="layui-nav-item layui-hide-xs">
-            <a
-              href=""
-              onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})"
-              title="微博登入"
-              class="iconfont icon-weibo"
-            ></a>
-          </li>
         </template>
         <!-- 登入后的状态 -->
         <template v-else>
-          <li class="layui-nav-item"  @mouseover="menuShow()" @mouseleave="menuHide()">
-            <a class="fly-nav-avatar" href="javascript:;">
-              <cite class="layui-hide-xs">{{userInfo.name}}</cite>
-              <i class="layui-badge fly-badge-vip layui-hide-xs" v-show="userInfo.isVip !== '0'">VIP{{userInfo.isVip}}</i>
-              <img
-                :src="userInfo.pic"
-              />
-            </a>
-            <dl class="layui-nav-child layui-anim layui-anim-downbit" :class="{'layui-show': isHover}">
+          <li
+            class="layui-nav-item"
+            @mouseover="menuShow()"
+            @mouseleave="menuHide()"
+          >
+            <router-link
+              class="fly-nav-avatar"
+              :to="{ name: 'userCenter' }"
+            >
+              <cite class="layui-hide-xs">{{ userInfo.name }}</cite>
+              <i
+                class="layui-badge fly-badge-vip layui-hide-xs"
+                v-show="userInfo.isVip !== '0'"
+                >VIP{{ userInfo.isVip }}</i
+              >
+              <img :src="userInfo.pic" />
+            </router-link>
+            <dl
+              class="layui-nav-child layui-anim layui-anim-downbit"
+              :class="{ 'layui-show': isHover }"
+            >
               <dd>
-                <router-link :to="{name: 'myInfo'}"><i class="layui-icon">&#xe620;</i>基本设置</router-link>
+                <router-link :to="{ name: 'userCenter' }"
+                  ><i class="layui-icon">&#xe620;</i>个人中心</router-link
+                >
               </dd>
               <dd>
-                <router-link :to="{name: 'userMessage'}"
+                <router-link :to="{ name: 'userMessage' }"
                   ><i class="iconfont icon-tongzhi" style="top: 4px"></i
                   >我的消息</router-link
                 >
               </dd>
               <dd>
-                <router-link :to="{name: 'user'}"
+                <router-link
+                  :to="{ name: 'user', params: { uid: userInfo._id } }"
                   ><i
                     class="layui-icon"
                     style="margin-left: 2px; font-size: 22px"
@@ -81,7 +81,12 @@
               </dd>
               <hr style="margin: 5px 0" />
               <dd>
-                <a href="javascript: void(0)" style="text-align: center" @click="logout()">退出</a>
+                <a
+                  href="javascript: void(0)"
+                  style="text-align: center"
+                  @click="logout()"
+                  >退出</a
+                >
               </dd>
             </dl>
           </li>
@@ -105,11 +110,13 @@ export default {
       return this.$store.state.isLogin
     },
     userInfo () {
-      return this.$store.state.userInfo || {
-        name: '',
-        pic: '',
-        isVip: 0
-      }
+      return (
+        this.$store.state.userInfo || {
+          name: '',
+          pic: '',
+          isVip: 0
+        }
+      )
     }
   },
   methods: {
@@ -131,8 +138,8 @@ export default {
         this.$store.commit('setToken', '')
         this.$store.commit('setUserInfo', '')
         this.$store.commit('setIsLogin', false)
-        this.$router.push('/', () => { })
-      }, () => {})
+        this.$router.push('/', () => {})
+      })
     }
   }
 }

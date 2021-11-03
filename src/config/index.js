@@ -3,5 +3,5 @@ export default {
     dev: 'http://localhost:3000',
     pro: 'http://www.baidu.com'
   },
-  publicPath: [/^\/public/, /\/login/]
+  publicPath: [/\/public/, /\/login/]
 }

@@ -1,6 +1,5 @@
 <template>
   <div class="layui-form layui-form-pane layui-tab-item layui-show">
-    <validation-observer ref="observer" v-slot="{ validate }">
       <validation-provider
         name="email"
         rules="required|email"
@@ -65,11 +64,11 @@
               name="sex"
               value="0"
               title="男"
-              v-model="gander"
+              v-model="gender"
             />
             <i
               class="layui-icon layui-icon-circle"
-              :class="{ 'layui-icon-radio': gander === '0' }"
+              :class="{ 'layui-icon-radio': gender === '0' }"
             ></i>
             男
           </label>
@@ -80,11 +79,11 @@
               name="sex"
               value="1"
               title="女"
-              v-model="gander"
+              v-model="gender"
             />
             <i
               class="layui-icon layui-icon-circle"
-              :class="{ 'layui-icon-radio': gander === '1' }"
+              :class="{ 'layui-icon-radio': gender === '1' }"
             ></i>
             女
           </label>
@@ -106,22 +105,20 @@
           确认修改
         </button>
       </div>
-    </validation-observer>
   </div>
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { ValidationProvider } from 'vee-validate'
 import { updateUserInfo } from '@/api/user.js'
 export default {
   name: 'myInfo',
   components: {
-    ValidationProvider,
-    ValidationObserver
+    ValidationProvider
   },
   data () {
     return {
-      gander: '',
+      gender: '',
       name: '',
       username: '',
       location: '',
@@ -129,8 +126,8 @@ export default {
     }
   },
   mounted () {
-    let { gander, name, username, location, regmark } = this.$store.state.userInfo
-    this.gander = gander || ''
+    let { gender, name, username, location, regmark } = this.$store.state.userInfo
+    this.gender = gender || ''
     this.name = name || ''
     this.username = username || ''
     this.location = location || ''
@@ -138,18 +135,24 @@ export default {
   },
   methods: {
     async submit () {
-      const isValid = await this.$refs.observer.validate()
-      if (!isValid) {
-        return
-      }
       updateUserInfo({
-        gander: this.gander,
+        gender: this.gender,
         name: this.name,
         username: this.username,
         location: this.location,
         regmark: this.regmark
       }).then((res) => {
         if (res.code === 200) {
+          this.$store.commit('setUserInfo', {
+            ...this.$store.state.userInfo,
+            ...{
+              gender: this.gender,
+              name: this.name,
+              username: this.username,
+              location: this.location,
+              regmark: this.regmark
+            }
+          })
           this.$alert('更新成功！')
         }
       })

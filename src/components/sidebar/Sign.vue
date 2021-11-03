@@ -40,8 +40,8 @@
 
       <!-- 已签到状态 -->
       <template v-else>
-        <button class="layui-btn layui-btn-disabled">今日已签到</button>
-        <span>获得了<cite>{{ favs }}</cite>飞吻</span>
+        <button class="layui-btn layui-btn-disabled moup">今日已签到</button>
+        <span>获得了<cite>{{ favs }}</cite>积分</span>
       </template>
     </div>
     <sin-info :isShow="isShow" @closeModal="close()"></sin-info>
@@ -88,6 +88,13 @@ export default {
     isLogin (newval, oldval) {
       // 去兼听current标签是否有变化，如果有变化，则需要重新进行查询
       this.isSign = false
+    },
+    userInfo (newval, oldval) {
+      if (newval.isSign === true) {
+        this.isSign = true
+      } else {
+        this.isSign = false
+      }
     }
   },
   computed: {
@@ -122,7 +129,11 @@ export default {
     },
     isLogin () {
       return this.$store.state.isLogin
+    },
+    userInfo () {
+      return this.$store.state.userInfo
     }
+
   },
   mounted () {
     const isSign = this.$store.state.userInfo.isSign

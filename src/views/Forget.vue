@@ -40,6 +40,7 @@
                     name="vercode"
                     rules="required|length:4"
                     v-slot="{ errors }"
+                    ref="vercodeField"
                   >
                     <div class="layui-form-item">
                       <label for="L_vercode" class="layui-form-label"
@@ -86,46 +87,18 @@
 </template>
 
 <script>
-import { getCode, forget } from '@/api/login'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import uuid from 'uuid/v4'
+import CodeMix from '@/mixin/vercode'
+import { forget } from '@/api/login'
 export default {
   name: 'forget',
+  mixins: [CodeMix],
   data () {
     return {
       username: '',
-      vercode: '',
-      svg: '',
-      sid: ''
+      vercode: ''
     }
   },
-  components: {
-    ValidationProvider,
-    ValidationObserver
-  },
-  mounted () {
-    this.getVerCode()
-  },
   methods: {
-    getVerCode () {
-      localStorage.clear()
-      this.getSid()
-      getCode(this.sid).then((res) => {
-        if (res.code === 200) {
-          this.svg = res.data
-        }
-      })
-    },
-    // 获取uuid用于校验验证码
-    getSid () {
-      if (localStorage.getItem('sid')) {
-        this.sid = localStorage.getItem('sid')
-      } else {
-        localStorage.setItem('sid', this.sid)
-        this.sid = uuid()
-      }
-      this.$store.commit('setSid', this.sid)
-    },
     async submit () {
       const isValid = await this.$refs.observer.validate()
       if (!isValid) {
@@ -137,6 +110,7 @@ export default {
         sid: this.sid
       })
         .then((res) => {
+          this.getVerCode()
           if (res.code === 200) {
             this.username = ''
             this.vercode = ''
@@ -145,14 +119,10 @@ export default {
             })
           } else if (res.code === 401) {
             this.$refs.vercodeField.setErrors([res.msg])
-          }
-        })
-        .catch((err) => {
-          const data = err.response.data
-          if (data.code === 500) {
+          } else if (res.code === 500) {
             this.$alert('用户名不存在，请检查！')
           } else {
-            this.$alert('服务器错误')
+            this.$alert(res.data)
           }
         })
     }

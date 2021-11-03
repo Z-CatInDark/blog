@@ -24,7 +24,7 @@
                       v-slot="{ errors }"
                     >
                       <div class="layui-row">
-                        <label for="L_email" class="layui-form-label"
+                        <label for="username" class="layui-form-label"
                           >用户名</label
                         >
                         <div class="layui-input-inline">
@@ -43,7 +43,7 @@
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
-                    <label for="L_username" class="layui-form-label"
+                    <label for="name" class="layui-form-label"
                       >昵称</label
                     >
                     <validation-provider
@@ -136,11 +136,11 @@
                             class="layui-input"
                           />
                         </div>
-                        <div class>
+                        <div>
                           <span
                             class="svg"
                             style="color: #c00"
-                            @click="_getCode()"
+                            @click="getVerCode()"
                             v-html="svg"
                           ></span>
                         </div>
@@ -185,37 +185,24 @@
 </template>
 
 <script>
-import { getCode, reg } from '@/api/login'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-
+import { reg } from '@/api/login'
+import CodeMix from '@/mixin/vercode'
 export default {
   name: 'reg',
+  mixins: [CodeMix],
   data () {
     return {
       username: '',
       name: '',
       password: '',
       repassword: '',
-      vercode: '',
-      svg: ''
+      vercode: ''
     }
   },
-  components: {
-    ValidationProvider,
-    ValidationObserver
-  },
   mounted () {
-    this._getCode()
+    this.$store.commit('_reload')
   },
   methods: {
-    _getCode () {
-      let sid = this.$store.state.sid
-      getCode(sid).then((res) => {
-        if (res.code === 200) {
-          this.svg = res.data
-        }
-      })
-    },
     async submit () {
       const isValid = await this.$refs.observer.validate()
       if (!isValid) {
@@ -228,6 +215,7 @@ export default {
         vercode: this.vercode,
         sid: this.$store.state.sid
       }).then((res) => {
+        this.getVerCode()
         if (res.code === 200) {
           this.username = ''
           this.password = ''

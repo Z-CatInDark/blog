@@ -15,19 +15,10 @@ const getCode = (sid) => {
   找回密码接口
   @params{*} option 用户信息(邮箱, 验证码)
 */
-const forget = async (option) => {
-  let result = ''
-  try {
-    result = await axios.post('/login/forget', {
-      ...option
-    })
-    if (result.status === 200) {
-      return result.data
-    }
-  } catch (e) {
-    console.log(e)
-  }
-  return result
+const forget = (option) => {
+  return axios.post('/login/forget', {
+    ...option
+  })
 }
 /*
   登录接口

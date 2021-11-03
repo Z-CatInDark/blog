@@ -132,48 +132,22 @@
 </template>
 
 <script>
-import { getCode, login } from '@/api/login.js'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import uuid from 'uuid/v4'
+import { login } from '@/api/login'
+import CodeMix from '@/mixin/vercode'
 export default {
   name: 'login',
+  mixins: [CodeMix],
   data () {
     return {
       username: '',
       password: '',
-      vercode: '',
-      svg: '',
-      sid: ''
+      vercode: ''
     }
   },
-  components: {
-    ValidationProvider,
-    ValidationObserver
-  },
   mounted () {
-    this.getVerCode()
+    this.$store.commit('_reload')
   },
   methods: {
-    // 获取验证码
-    getVerCode () {
-      localStorage.clear()
-      this.getSid()
-      getCode(this.sid).then((res) => {
-        if (res.code === 200) {
-          this.svg = res.data
-        }
-      })
-    },
-    // 获取uuid用于校验验证码
-    getSid () {
-      if (localStorage.getItem('sid')) {
-        this.sid = localStorage.getItem('sid')
-      } else {
-        localStorage.setItem('sid', this.sid)
-        this.sid = uuid()
-      }
-      this.$store.commit('setSid', this.sid)
-    },
     async submit () {
       const isValid = await this.$refs.observer.validate()
       if (!isValid) {
@@ -186,6 +160,7 @@ export default {
         sid: this.sid
       })
         .then((res) => {
+          this.getVerCode()
           if (res.code === 200) {
             // 存储用户登录名
             res.data.username = this.username
@@ -217,7 +192,5 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.fly-panel {
-  height: 100%;
-}
+
 </style>

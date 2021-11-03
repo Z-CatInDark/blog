@@ -25,11 +25,16 @@ export default new Vuex.Store({
     setUserInfo (state, value) {
       if (value === '') return
       state.userInfo = value
-      // 保持用户登录状态 localStorage需手动清除 sessionStorage关闭会话时清除数据
       localStorage.setItem('userInfo', JSON.stringify(value))
     },
     setIsLogin (state, value) {
       state.isLogin = value
+    },
+    _reload () {
+      if (location.href.indexOf('#reloaded') === -1) {
+        location.href = location.href + '#reloaded'
+        location.reload()
+      }
     }
   },
   actions: {

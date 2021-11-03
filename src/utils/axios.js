@@ -32,12 +32,11 @@ class HttpRequest {
   interceptors (instance) {
     // 请求拦截器
     instance.interceptors.request.use((config) => {
-      // Do something before request is sent
       let isPublic = false
+      const token = store.state.token
       publicConfig.publicPath.map((path) => {
         isPublic = isPublic || path.test(config.url)
       })
-      const token = store.state.token
       if (!isPublic && token) {
         config.headers.Authorization = 'Bearer ' + token
       }
@@ -48,16 +47,12 @@ class HttpRequest {
       })
       return config
     }, (err) => {
-      // debugger
       errorHandle(err)
-      // Do something with request error
       return Promise.reject(err)
     })
 
     // 响应请求的拦截器
     instance.interceptors.response.use((res) => {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
       let key = res.config.url + '&' + res.config.method
       this.removePending(key)
       if (res.status === 200) {
@@ -66,9 +61,6 @@ class HttpRequest {
         return Promise.reject(res)
       }
     }, (err) => {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      // debugger
       errorHandle(err)
       return Promise.reject(err)
     })
