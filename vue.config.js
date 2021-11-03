@@ -14,10 +14,10 @@ module.exports = {
   devServer: {
     open: true,
     host: '0.0.0.0',
-    port: 3000, // 开发服务器运行端口号
+    port: 8081, // 开发服务器运行端口号
     proxy: {
       '/api': {
-        target: 'http://8.135.32.181', // 代理接口地址http://localhost:3000
+        target: 'http://8.135.32.181:3001/', // 代理接口地址
         secure: false, // 如果是https接口，需要配置这个参数
         changeOrigin: true, // 是否跨域
         pathRewrite: {
