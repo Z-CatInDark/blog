@@ -32,20 +32,19 @@
                             type="text"
                             name="username"
                             v-model="username"
-                            placeholder="请输入用户名"
+                            placeholder="将会成为您唯一的登入名"
                             autocomplete="off"
                             class="layui-input"
                           />
                         </div>
-                        <span style="color: #c00">{{ errors[0] }}</span>
+                        <div class="layui-form-mid">
+                          <span style="color: #c00">{{ errors[0] }}</span>
+                        </div>
                       </div>
-                      <div class="layui-word-aux">将会成为您唯一的登入名</div>
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
-                    <label for="name" class="layui-form-label"
-                      >昵称</label
-                    >
+                    <label for="name" class="layui-form-label">昵称</label>
                     <validation-provider
                       name="name"
                       rules="required|min:1|name"
@@ -82,14 +81,15 @@
                             type="password"
                             name="password"
                             v-model="password"
-                            placeholder="请输入密码"
+                            placeholder="6到16个字符"
                             autocomplete="off"
                             class="layui-input"
                           />
                         </div>
-                        <span style="color: #c00">{{ errors[0] }}</span>
+                        <div class="layui-form-mid">
+                          <span style="color: #c00">{{ errors[0] }}</span>
+                        </div>
                       </div>
-                      <div class="layui-word-aux">6到16个字符</div>
                     </validation-provider>
                   </div>
                   <div class="layui-form-item">
@@ -107,12 +107,14 @@
                             type="password"
                             name="repassword"
                             v-model="repassword"
-                            placeholder="请输入密码"
+                            placeholder="请再次输入密码"
                             autocomplete="off"
                             class="layui-input"
                           />
                         </div>
-                        <span style="color: #c00">{{ errors[0] }}</span>
+                        <div class="layui-form-mid">
+                          <span style="color: #c00">{{ errors[0] }}</span>
+                        </div>
                       </div>
                     </validation-provider>
                   </div>

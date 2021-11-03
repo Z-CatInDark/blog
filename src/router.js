@@ -180,11 +180,11 @@ const router = new Router({
     },
     {
       path: '/404',
+      name: '404',
       component: NotFound
     },
     {
       path: '*',
-      name: '404',
       redirect: '/404'
     }
   ],

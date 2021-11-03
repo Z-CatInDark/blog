@@ -15,13 +15,15 @@
             <div class="layui-tab-item layui-show">
               <div class="layui-form layui-form-pane">
                 <form method="post">
+                  <validation-provider v-slot="{ errors }" ref="userField">
+                    <div class="layui-form-mid">
+                      <span style="color: #c00">{{ errors[0] }}</span>
+                    </div>
+                  </validation-provider>
+
                   <div class="layui-form-item">
                     <label for="L_email" class="layui-form-label">用户名</label>
-                    <validation-provider
-                      name="username"
-                      rules="required|email"
-                      v-slot="{ errors }"
-                    >
+                    <validation-provider v-slot="{ errors }">
                       <div class="layui-input-inline">
                         <input
                           v-model="username"
@@ -108,18 +110,16 @@
                   </div>
                   <div class="layui-form-item fly-form-app">
                     <span>或者使用社交账号登入</span>
-                    <a
-                      href="/app/qq"
-                      onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
+                    <router-link
+                      :to="{ name: '404' }"
                       class="iconfont icon-qq"
                       title="QQ登入"
-                    ></a>
-                    <a
-                      href="/app/weibo/"
-                      onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})"
+                    ></router-link>
+                    <router-link
+                      :to="{ name: '404' }"
                       class="iconfont icon-weibo"
                       title="微博登入"
-                    ></a>
+                    ></router-link>
                   </div>
                 </form>
               </div>
@@ -146,6 +146,18 @@ export default {
   },
   mounted () {
     this.$store.commit('_reload')
+  },
+  watch: {
+    username (newval, oldval) {
+      requestAnimationFrame(() => {
+        this.$refs.observer.reset()
+      })
+    },
+    password (newval, oldval) {
+      requestAnimationFrame(() => {
+        this.$refs.observer.reset()
+      })
+    }
   },
   methods: {
     async submit () {
@@ -176,6 +188,8 @@ export default {
             this.$router.push({ name: 'index' })
           } else if (res.code === 401) {
             this.$refs.vercodeField.setErrors([res.msg])
+          } else if (res.code === 404) {
+            this.$refs.userField.setErrors([res.msg])
           }
         })
         .catch((err) => {
@@ -192,5 +206,4 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
 </style>
