@@ -5,7 +5,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 module.exports = {
-  publicPath: './', // 基本路径
+  publicPath: '/', // 基本路径
   outputDir: 'dist', // 输出文件目录
   assetsDir: 'static', // css js 等静态文件目录
   // lintOnSave: 'error', // 设置eslint报错时停止代码编译
