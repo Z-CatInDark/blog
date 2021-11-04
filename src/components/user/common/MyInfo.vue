@@ -18,13 +18,6 @@
           <div class="layui-form-mid">
             <span style="color: #c00">{{ errors[0] }}</span>
           </div>
-          <!--           <div class="layui-form-mid layui-word-aux">
-            如果您在邮箱已激活的情况下，变更了邮箱，需<a
-              href="activate.html"
-              style="font-size: 12px; color: #4f99cf"
-              >重新验证邮箱</a
-            >。
-          </div> -->
         </div>
       </validation-provider>
       <div class="layui-form-item">
@@ -56,7 +49,7 @@
       </div>
       <div class="layui-form-item">
         <label for="L_city" class="layui-form-label">性别</label>
-        <div class="layui-input-inline ml1 mt1 gray">
+        <div class="layui-form-mid ml1 gray">
           <label for="man" class="mr1">
             <input
               id="man"

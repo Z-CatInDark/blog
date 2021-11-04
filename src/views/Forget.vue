@@ -38,7 +38,7 @@
                   </div>
                   <validation-provider
                     name="vercode"
-                    rules="required|length:4"
+                    rules="required"
                     v-slot="{ errors }"
                     ref="vercodeField"
                   >
@@ -56,7 +56,11 @@
                           class="layui-input"
                         />
                       </div>
-                      <div>
+                      <div class="layui-form-mid">
+                        <span style="color: #c00">{{ errors[0] }}</span>
+                      </div>
+                    </div>
+                      <div class="layui-form-mid mtop">
                         <span
                           class="svg"
                           style="color: #c00"
@@ -64,8 +68,6 @@
                           @click="getVerCode()"
                         ></span>
                       </div>
-                      <span style="color: #c00">{{ errors[0] }}</span>
-                    </div>
                   </validation-provider>
                   <div class="layui-form-item">
                     <button
@@ -108,27 +110,32 @@ export default {
         username: this.username,
         vercode: this.vercode,
         sid: this.sid
+      }).then((res) => {
+        this.getVerCode()
+        if (res.code === 200) {
+          this.username = ''
+          this.vercode = ''
+          requestAnimationFrame(() => {
+            this.$refs.observer.reset()
+          })
+        } else if (res.code === 401) {
+          this.$refs.vercodeField.setErrors([res.msg])
+        } else if (res.code === 500) {
+          this.$alert('用户名不存在，请检查！')
+        } else {
+          this.$alert(res.data)
+        }
       })
-        .then((res) => {
-          this.getVerCode()
-          if (res.code === 200) {
-            this.username = ''
-            this.vercode = ''
-            requestAnimationFrame(() => {
-              this.$refs.observer.reset()
-            })
-          } else if (res.code === 401) {
-            this.$refs.vercodeField.setErrors([res.msg])
-          } else if (res.code === 500) {
-            this.$alert('用户名不存在，请检查！')
-          } else {
-            this.$alert(res.data)
-          }
-        })
     }
   }
 }
 </script>
 
-<style lang='sass' scoped>
+<style lang='scss' scoped>
+.fly-panel {
+  height: 296px;
+}
+.mtop {
+  margin-top: -20px;
+}
 </style>

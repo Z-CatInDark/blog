@@ -63,7 +63,7 @@
                   </div>
                   <validation-provider
                     name="vercode"
-                    rules="required"
+                    rules="required|length:4"
                     v-slot="{ errors }"
                     ref="vercodeField"
                   >
@@ -82,17 +82,17 @@
                             class="layui-input"
                           />
                         </div>
-                        <div class="layui-form-mid">
-                          <span style="color: #c00">{{ errors[0] }}</span>
+                        <div>
+                          <span
+                            class="svg"
+                            style="color: #c00"
+                            v-html="svg"
+                            @click="getVerCode()"
+                          ></span>
                         </div>
                       </div>
-                      <div class="layui-form-mid mtop">
-                        <span
-                          class="svg"
-                          style="color: #c00"
-                          v-html="svg"
-                          @click="getVerCode()"
-                        ></span>
+                      <div class="line-height0">
+                        <span style="color: #c00">{{ errors[0] }}</span>
                       </div>
                     </div>
                   </validation-provider>
@@ -211,7 +211,12 @@ export default {
 .fly-panel {
   height: 418px;
 }
-.mtop {
+.layui-row {
+  height: 56px;
+}
+.line-height0 {
+  line-height: 0px !important;
   margin-top: -20px;
+  align: left;
 }
 </style>

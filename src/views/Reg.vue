@@ -121,7 +121,7 @@
                   <div class="layui-form-item">
                     <validation-provider
                       name="vercode"
-                      rules="required|length:4"
+                      rules="required"
                       v-slot="{ errors }"
                     >
                       <div class="layui-row">
@@ -138,7 +138,11 @@
                             class="layui-input"
                           />
                         </div>
-                        <div>
+                         <div class="layui-form-mid">
+                          <span style="color: #c00">{{ errors[0] }}</span>
+                        </div>
+                      </div>
+                       <div  class="layui-form-mid">
                           <span
                             class="svg"
                             style="color: #c00"
@@ -146,13 +150,9 @@
                             v-html="svg"
                           ></span>
                         </div>
-                      </div>
-                      <div class="layui-form-mid">
-                        <span style="color: #c00">{{ errors[0] }}</span>
-                      </div>
                     </validation-provider>
                   </div>
-                  <div class="layui-form-item">
+                  <div class="layui-form-item mtop16">
                     <button
                       class="layui-btn"
                       type="button"
@@ -163,18 +163,18 @@
                   </div>
                   <div class="layui-form-item fly-form-app">
                     <span>或者直接使用社交账号快捷注册</span>
-                    <a
-                      href
+                    <router-link
                       onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
                       class="iconfont icon-qq"
-                      title="QQ登入"
-                    ></a>
-                    <a
-                      href
+                      title="qq登入"
+                      :to="{name: '404'}"
+                    ></router-link>
+                    <router-link
                       onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})"
                       class="iconfont icon-weibo"
                       title="微博登入"
-                    ></a>
+                      :to="{name: '404'}"
+                    ></router-link>
                   </div>
                 </form>
               </div>
@@ -202,7 +202,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.commit('_reload')
+    // this.$store.commit('_reload')
   },
   methods: {
     async submit () {
@@ -241,4 +241,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.fly-panel {
+  height: 524px;
+}
+.mtop16 {
+  margin-top: -16px;
+}
 </style>

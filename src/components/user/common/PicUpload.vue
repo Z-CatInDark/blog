@@ -13,7 +13,7 @@
           accept="image/png, image/jpg"
           @change="upload($event)"
         />
-        <img :src="pic" />
+        <img :src="pic" class="imgSize"/>
         <span class="loading"></span>
       </div>
     </div>
@@ -63,5 +63,9 @@ export default {
 <style lang='scss' scoped>
 #pic {
   display: none;
+}
+.imgSize {
+  width: 168px;
+  height: 168px;
 }
 </style>

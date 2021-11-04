@@ -1,11 +1,10 @@
 <template>
   <div class="layui-container fly-marginTop">
     <div class="fly-panel" pad20 style="padding-top: 5px">
-      <!--<div class="fly-none">没有权限</div>-->
       <div class="layui-form layui-form-pane">
         <div class="layui-tab layui-tab-brief" lay-filter="user">
           <ul class="layui-tab-title">
-            <li class="layui-this">发表新帖<!-- 编辑帖子 --></li>
+            <li class="layui-this">发表新帖</li>
           </ul>
           <div
             class="layui-form layui-tab-content"
@@ -84,11 +83,15 @@
                       </validation-provider>
                     </div>
                   </div>
-                  <editor @changeContent="addValue" :recoveryContent="content"> </editor>
+                  <editor @changeContent="addValue" :recoveryContent="content">
+                  </editor>
                   <div class="layui-form-item">
                     <div class="layui-inline">
                       <label class="layui-form-label">悬赏积分</label>
-                      <div class="layui-input-block" @click="changeSelect_fav()">
+                      <div
+                        class="layui-input-block"
+                        @click="changeSelect_fav()"
+                      >
                         <div
                           class="layui-unselect layui-form-select"
                           :class="{ 'layui-form-selected': isSelect_fav }"
@@ -123,7 +126,7 @@
                   </div>
                   <validation-provider
                     name="vercode"
-                    rules="required|length:4"
+                    rules="required"
                     v-slot="{ errors }"
                   >
                     <div class="layui-row">
@@ -141,15 +144,17 @@
                             class="layui-input"
                           />
                         </div>
-                        <div>
-                          <span
-                            class="svg"
-                            style="color: #c00"
-                            v-html="svg"
-                            @click="getVerCode()"
-                          ></span>
+                        <div class="layui-form-mid">
+                          <span style="color: #c00">{{ errors[0] }}</span>
                         </div>
-                        <span style="color: #c00">{{ errors[0] }}</span>
+                      </div>
+                      <div class="layui-form-mid mtop">
+                        <span
+                          class="svg"
+                          style="color: #c00"
+                          v-html="svg"
+                          @click="getVerCode()"
+                        ></span>
                       </div>
                     </div>
                   </validation-provider>
@@ -219,18 +224,22 @@ export default {
     Editor
   },
   mounted () {
-    this.$store.commit('_reload')
+    // this.$store.commit('_reload')
     const saveData = localStorage.getItem('addData')
     if (saveData && saveData !== '') {
-      this.$confirm('是否加载未编辑完的内容', () => {
-        const obj = JSON.parse(saveData)
-        this.content = obj.content
-        this.title = obj.title
-        this.cataIndex = obj.cataIndex
-        this.favIndex = obj.favIndex
-      }, () => {
-        localStorage.setItem('addData', '')
-      })
+      this.$confirm(
+        '是否加载未编辑完的内容',
+        () => {
+          const obj = JSON.parse(saveData)
+          this.content = obj.content
+          this.title = obj.title
+          this.cataIndex = obj.cataIndex
+          this.favIndex = obj.favIndex
+        },
+        () => {
+          localStorage.setItem('addData', '')
+        }
+      )
     }
   },
   methods: {
@@ -280,7 +289,10 @@ export default {
           localStorage.setItem('addData', '')
           this.$pop('', '发帖成功')
           setTimeout(() => {
-            this.$router.push({ name: 'detail', params: { tid: res.data._id } })
+            this.$router.push({
+              name: 'detail',
+              params: { tid: res.data._id }
+            })
           }, 1000)
         } else {
           this.$alert(res.msg)
@@ -292,5 +304,10 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
+.fly-panel {
+  height: 675px;
+}
+.mtop {
+  margin-top: -20px;
+}
 </style>

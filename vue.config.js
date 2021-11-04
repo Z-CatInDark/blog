@@ -14,8 +14,9 @@ module.exports = {
   devServer: {
     open: true,
     host: '0.0.0.0',
-    port: 8081, // 开发服务器运行端口号
-    proxy: {
+    port: 8080, // 开发服务器运行端口号
+    proxy: 'http://localhost:3000'
+    /*     proxy: {
       '/api': {
         target: 'http://8.135.32.181:3001/', // 代理接口地址
         secure: false, // 如果是https接口，需要配置这个参数
@@ -24,7 +25,7 @@ module.exports = {
           '^/api': '' // 需要rewrite的, 这里理解成以'/api'开头的接口地址，把/api代替target中的地址
         }
       }
-    }
+    } */
   },
   chainWebpack: (config) => {
     // 移除 prefetch 插件(针对生产环境首屏请求数进行优化)

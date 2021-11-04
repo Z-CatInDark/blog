@@ -22,7 +22,7 @@
 export default {
   name: 'userSettings',
   mounted () {
-    this.$store.commit('_reload')
+    // this.$store.commit('_reload')
   },
   data () {
     return {

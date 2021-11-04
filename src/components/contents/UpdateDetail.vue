@@ -51,7 +51,8 @@
                       </div>
                     </div>
                   </div>
-                  <editor @changeContent="addValue" :recoveryContent="content"> </editor>
+                  <editor @changeContent="addValue" :recoveryContent="content">
+                  </editor>
                   <div class="layui-form-item">
                     <div class="layui-inline">
                       <label class="layui-form-label">悬赏积分</label>
@@ -91,19 +92,21 @@
                             class="layui-input"
                           />
                         </div>
-                        <div>
-                          <span
-                            class="svg"
-                            style="color: #c00"
-                            v-html="svg"
-                            @click="getVerCode()"
-                          ></span>
+                        <div class="layui-form-mid">
+                          <span style="color: #c00">{{ errors[0] }}</span>
                         </div>
-                        <span style="color: #c00">{{ errors[0] }}</span>
+                      </div>
+                      <div>
+                        <span
+                          class="svg"
+                          style="color: #c00"
+                          v-html="svg"
+                          @click="getVerCode()"
+                        ></span>
                       </div>
                     </div>
                   </validation-provider>
-                  <div class="layui-form-item">
+                  <div class="layui-form-item" :class="{'mtop20': marginAdd}">
                     <button
                       class="layui-btn"
                       lay-filter="*"
@@ -138,6 +141,7 @@ export default {
       vercode: '',
       content: '',
       title: '',
+      marginAdd: false,
       catalogs: [
         {
           text: '请选择',
@@ -171,20 +175,28 @@ export default {
       this.content = this.page.content
       this.title = this.page.title
       this.favIndex = this.favList.indexOf(parseInt(this.page.fav))
-      this.cataIndex = this.catalogs.indexOf(this.catalogs.filter(item => item.value === this.page.catalog)[0])
+      this.cataIndex = this.catalogs.indexOf(
+        this.catalogs.filter((item) => item.value === this.page.catalog)[0]
+      )
       localStorage.setItem('updateData', JSON.stringify(this.page))
     } else {
       const saveData = localStorage.getItem('updateData')
       if (saveData && saveData !== '') {
-        this.$confirm('是否加载未编辑完的内容', () => {
-          const obj = JSON.parse(saveData)
-          this.content = obj.content
-          this.title = obj.title
-          this.cataIndex = obj.cataIndex
-          this.favIndex = obj.favIndex
-        }, () => {
-          localStorage.setItem('updateData', '')
-        })
+        // 由于刷新按钮样式会错乱，动态添加样式
+        this.marginAdd = true
+        this.$confirm(
+          '是否加载未编辑完的内容',
+          () => {
+            const obj = JSON.parse(saveData)
+            this.content = obj.content
+            this.title = obj.title
+            this.cataIndex = obj.cataIndex
+            this.favIndex = obj.favIndex
+          },
+          () => {
+            localStorage.setItem('updateData', '')
+          }
+        )
       }
     }
   },
@@ -199,7 +211,7 @@ export default {
       }
       if (this.title.trim() !== '' && this.content.trim() !== '') {
         const editData = localStorage.getItem('updateData')
-        let newObj = { }
+        let newObj = {}
         if (editData && editData !== '') {
           newObj = { ...saveData, ...JSON.parse(editData) }
         }
@@ -239,8 +251,11 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .back-height {
-    height: 664px;
-    padding-top: 5px
-  }
+.back-height {
+  height: 664px;
+  padding-top: 5px;
+}
+.mtop20 {
+  margin-top: 20px;
+}
 </style>
