@@ -22,6 +22,10 @@ export default new Vuex.Store({
       state.token = value
       localStorage.setItem('token', value)
     },
+    setValidateToken (state, value) {
+      if (value === '') return
+      state.token = value
+    },
     setUserInfo (state, value) {
       if (value === '') return
       state.userInfo = value

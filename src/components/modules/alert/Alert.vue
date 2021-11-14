@@ -42,7 +42,7 @@ export default {
   methods: {
     close () {
       this.isShow = false
-      this.cancel()
+      this.success()
     },
     closeMask () {
       if (this.type === 'alert') {

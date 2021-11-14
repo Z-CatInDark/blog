@@ -1,9 +1,9 @@
-const path = require('path')
+// const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin') // cnpm install --save-dev compression-webpack-plugin插件需要npm安装
 
-function resolve (dir) {
-  return path.join(__dirname, dir)
-}
+// function resolve (dir) {
+//   return path.join(__dirname, dir)
+// }
 module.exports = {
   publicPath: '/', // 基本路径
   outputDir: 'dist', // 输出文件目录
@@ -15,17 +15,17 @@ module.exports = {
     open: true,
     host: '0.0.0.0',
     port: 8080, // 开发服务器运行端口号
-    // proxy: 'http://localhost:3000'
-    proxy: {
-      '/api': {
-        target: 'http://8.135.32.181:3001/', // 代理接口地址
-        secure: false, // 如果是https接口，需要配置这个参数
-        changeOrigin: true, // 是否跨域
-        pathRewrite: {
-          '^/api': '' // 需要rewrite的, 这里理解成以'/api'开头的接口地址，把/api代替target中的地址
-        }
-      }
-    }
+    proxy: 'http://localhost:3000'
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://8.135.32.181:3001/', // 代理接口地址
+    //     secure: false, // 如果是https接口，需要配置这个参数
+    //     changeOrigin: true, // 是否跨域
+    //     pathRewrite: {
+    //       '^/api': '' // 需要rewrite的, 这里理解成以'/api'开头的接口地址，把/api代替target中的地址
+    //     }
+    //   }
+    // }
   },
   chainWebpack: (config) => {
     // 移除 prefetch 插件(针对生产环境首屏请求数进行优化)
@@ -33,11 +33,11 @@ module.exports = {
     // 移除 preload 插件(针对生产环境首屏请求数进行优化)
     config.plugins.delete('preload')
     // 第1个参数：别名，第2个参数：路径  （设置路径别名）
-    config.resolve.alias
-      .set('@pages', resolve('./src/page'))
-      .set('@router', resolve('./src/router'))
-      .set('@store', resolve('./src/store'))
-      .set('@utils', resolve('./src/utils'))
+    // config.resolve.alias
+    //   .set('@pages', resolve('./src/page'))
+    //   .set('@router', resolve('./src/router'))
+    //   .set('@store', resolve('./src/store'))
+    //   .set('@utils', resolve('./src/utils'))
   },
   // 配置打包 js、css文件为.gz格式，优化加载速度  （参考：https://blog.csdn.net/qq_31677507/article/details/102742196）
   configureWebpack: config => {

@@ -12,7 +12,7 @@ const escapeHtml = (val = '') => {
     })
   }
 
-  // 连接转换
+  // 图片链接转换
   const img = /img\[\S+]/g
   if (img.test(result)) {
     let group = result.match(img)

@@ -11,7 +11,7 @@ const updateUserInfo = (data) => axios.post('/user/basic', data)
 const updateUsername = (data) => axios.get('/public/reset-email?' + qs.stringify(data))
 
 // 重置密码
-const resetPassword = (data) => axios.post('/public/reset-password', {
+const resetPassword = (data) => axios.post('/user/reset-password', {
   ...data
 })
 
@@ -47,6 +47,9 @@ const getPostPublic = (params) => axios.get('/public/latest-post?' + qs.stringif
 // 获取最近的评论纪录
 const getCommentPublic = (params) => axios.get('/public/latest-comments?' + qs.stringify(params))
 
+// 验证token
+const validateToken = (params) => axios.get('/public/validate-token?' + qs.stringify(params))
+
 export {
   userSign,
   updateUserInfo,
@@ -61,5 +64,6 @@ export {
   resetPassword,
   getCommentList,
   getPostPublic,
-  getCommentPublic
+  getCommentPublic,
+  validateToken
 }

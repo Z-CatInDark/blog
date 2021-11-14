@@ -67,7 +67,18 @@ const router = new Router({
     {
       path: '/reset',
       name: 'reset',
-      component: Reset
+      component: Reset,
+      beforeEnter (to, from, next) {
+        let queryStr = window.location.href.replace(/.*\?/, '')
+        let obj = Object.fromEntries(
+          queryStr.split('&').map((val) => val.split('='))
+        )
+        if (obj.key && obj.username) {
+          next()
+        } else {
+          next('/')
+        }
+      }
     },
     {
       path: '/add',
@@ -194,9 +205,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-  if (token !== '' && token !== null) {
+  if (token !== '' && token !== 'undefined' && token !== null) {
     const payload = jwt.decode(token)
-    // token过期后清空localStorage,过期时间一天
+    // token过期后清空localStorage, 过期时间一天
     if (moment().isBefore(moment(payload.exp * 1000))) {
       store.commit('setToken', token)
       store.commit('setUserInfo', userInfo)

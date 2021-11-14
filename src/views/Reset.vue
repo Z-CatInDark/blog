@@ -111,7 +111,7 @@
 
 <script>
 import CodeMix from '@/mixin/vercode'
-import { resetPassword } from '@/api/user'
+import { resetPassword, validateToken } from '@/api/user'
 let obj = {}
 export default {
   name: 'reset',
@@ -121,17 +121,15 @@ export default {
       username: '',
       password: '',
       repassword: '',
-      vercode: '',
-      key: ''
+      vercode: ''
     }
   },
   mounted () {
-    let queryStr = window.location.href.replace(/.*\?/, '')
-    obj = Object.fromEntries(
-      queryStr.split('&').map((val) => val.split('='))
-    )
-    this.username = decodeURIComponent(obj.usernameimii)
-    this.key = decodeURIComponent(obj.key)
+    // let queryStr = window.location.href.replace(/.*\?/, '')
+    // obj = Object.fromEntries(queryStr.split('&').map((val) => val.split('=')))
+    // this.username = decodeURIComponent(obj.username)
+    // this.$store.commit('setToken', obj.key)
+    this._validateToken()
   },
   methods: {
     async submit () {
@@ -143,28 +141,46 @@ export default {
         username: this.username,
         vercode: this.vercode,
         password: this.password,
-        sid: this.sid,
-        key: this.key
+        sid: this.sid
+      }).then((res) => {
+        this.getVerCode()
+        if (res.code === 200) {
+          this.username = ''
+          this.password = ''
+          this.repassword = ''
+          this.vercode = ''
+          requestAnimationFrame(() => {
+            this.$refs.observer.reset()
+          })
+          this.$alert('重置密码成功', () => {
+            this.$store.commit('setValidateToken', '')
+            this.$router.push('/login')
+          })
+        } else if (res.code === 401) {
+          this.$refs.vercodeField.setErrors([res.msg])
+        } else {
+          this.$alert(res.data)
+        }
       })
-        .then((res) => {
-          this.getVerCode()
-          if (res.code === 200) {
-            this.username = ''
-            this.password = ''
-            this.repassword = ''
-            this.vercode = ''
-            requestAnimationFrame(() => {
-              this.$refs.observer.reset()
-            })
-            this.$alert('重置密码成功', () => {
-              this.$router.push('/login')
-            })
-          } else if (res.code === 401) {
-            this.$refs.vercodeField.setErrors([res.msg])
-          } else {
-            this.$alert(res.data)
-          }
-        })
+    },
+    _validateToken () {
+      let queryStr = window.location.href.replace(/.*\?/, '')
+      obj = Object.fromEntries(
+        queryStr.split('&').map((val) => val.split('='))
+      )
+      validateToken({
+        username: decodeURIComponent(obj.username),
+        key: obj.key
+      }).then((res) => {
+        if (res.code === 200) {
+          this.username = decodeURIComponent(obj.username)
+          this.$store.commit('setValidateToken', obj.key)
+        } else {
+          this.$alert(res.msg, () => {
+            this.$router.push('/', () => {})
+          })
+        }
+      })
     }
   }
 }
