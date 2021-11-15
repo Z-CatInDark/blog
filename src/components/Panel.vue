@@ -11,8 +11,8 @@
           tag="li"
           :to="item.path"
         >
-          <a href="jie/index.html">{{ item.name }}</a>
-          <span class="layui-badge-dot" v-if="item.isNew"></span>
+          <a>{{ item.name }}</a>
+          <!-- <span class="layui-badge-dot" v-if="item.isNew"></span> -->
         </router-link>
         <li class="layui-hide-xs layui-hide-sm">
           <span class="line"></span>
@@ -49,7 +49,7 @@ export default {
         {
           name: '分享',
           path: '/index/share',
-          isNew: true
+          isNew: false
         },
         {
           name: '讨论',
