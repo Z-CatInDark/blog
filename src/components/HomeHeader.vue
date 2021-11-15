@@ -10,9 +10,8 @@
           >
         </li>
         <li class="layui-nav-item">
-          <a href="case/case.html"
-            ><i class="iconfont icon-iconmingxinganli"></i>项目分享</a
-          >
+          <router-link :to="{ name: '404' }"
+            ><i class="iconfont icon-iconmingxinganli"></i>项目分享<router-link>
         </li>
         <!-- <li class="layui-nav-item">
           <router-link to="case/case.html"><i class="layui-icon layui-icon-app"></i>框架</router-link>
@@ -25,7 +24,7 @@
           <li class="layui-nav-item">
             <router-link
               class="iconfont icon-touxiang layui-hide-xs"
-              :to="'/404'"
+              :to="'/login'"
             ></router-link>
           </li>
           <li class="layui-nav-item">
