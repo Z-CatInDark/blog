@@ -14,9 +14,6 @@
           <a>{{ item.name }}</a>
           <!-- <span class="layui-badge-dot" v-if="item.isNew"></span> -->
         </router-link>
-        <li class="layui-hide-xs layui-hide-sm">
-          <span class="line"></span>
-        </li>
         <!-- 用户登入后显示 -->
         <template v-if="isLogin">
           <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
