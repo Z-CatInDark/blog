@@ -2,12 +2,12 @@
   <div>
     <ul class="fly-list">
       <li v-for="(item, index) in items" :key="'listitem' + index">
-        <a href="user/home.html" class="fly-avatar">
+        <router-link :to="{name: 'user', params: {uid: item.uid._id}}" class="fly-avatar">
           <img
             :src="item.uid.pic"
             alt="svg"
           />
-        </a>
+        </router-link>
         <h2>
           <a class="layui-badge">{{ item.catalog }}</a>
           <router-link :to="{name: 'detail', params: {tid: item._id}}">{{ item.title }}</router-link>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    let testStr = 'asdasddsfdsfadsfdghdadsdfdgdasd';
+        function getMax(str) {
+            let obj = {};
+            for(let i in str) {
+                if(obj[str[i]]) {
+                    obj[str[i]]++;
+                }else{
+                    obj[str[i]] = 1;
+                console.log()
+                }
+            }
+            let keys = Object.keys(obj); // 获取对象中所有key的值返回数组
+            let values = Object.values(obj); // 获取所有value返回数组
+            let maxVal = Math.max(...values);// Math.max可以找出传入参数的最大值，如：Math.max(1,2);这里可使用es6中的解构，
+            console.log(keys);
+            console.log(values.indexOf(maxVal));
+            console.log(keys[values.indexOf(maxVal)],maxVal);
+        }
+        getMax(testStr);
+  </script>
+</head>
+<body>
+  <input type="file">
+</body>
+</html>
